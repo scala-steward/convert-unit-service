@@ -4,20 +4,33 @@ import java.math.{MathContext, RoundingMode}
 
 import javax.inject.Inject
 import v1.units.domain.Entities._
-import v1.units.domain.Response.ConvertResponse
+import v1.units.domain.Response.ConversionResponse
 
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
-class UnitsHandler @Inject()()(
-  implicit ec: ExecutionContext) {
+/**
+ * Handle units conversion to the International System of Units.
+ *
+ * @see <a href="https://en.wikipedia.org/wiki/International_System_of_Units">https://en.wikipedia.org/wiki/International_System_of_Units</a>
+ */
+class UnitsHandler @Inject()()(implicit ec: ExecutionContext) {
 
+  /**
+   * Math configuration to define floating point number
+   * including 14 significant digits to output in scientific notation.
+   */
   private lazy val significantContext = new MathContext(14, RoundingMode.DOWN)
 
-  def convertToSI(unit: String): Future[ConvertResponse] =
+  def convertToSI(unit: String): Future[ConversionResponse] =
     Future.successful(makeExpression(unit))
-      .map(expr => ConvertResponse(expr.name(), BigDecimal(expr.multiplicationFactor().toString(), significantContext)))
+      .map(expr => ConversionResponse(expr.name(), BigDecimal(expr.multiplicationFactor().toString(), significantContext)))
 
+  /**
+   * Make an expression based on the unit query string.
+   * @return Conversion expression - see more [[Expression]].
+   * @throws Exception If unit is an invalid expression like (degree **) or (ha*°*).
+   */
   private def makeExpression(unit: String): Expression = {
     val c1 = unit.count(p => p == '(')
     val c2 = unit.count(p => p == ')')
@@ -49,6 +62,10 @@ class UnitsHandler @Inject()()(
     getExpression(queue.mkString(""))
   }
 
+  /**
+   * Get expression using Tree Logic based on [[OperationExpr]] and [[UnitExpr]].
+   * @return Expression.
+   */
   private def getExpression(unit: String): Expression = {
     val formula =
       if (unit.startsWith("(")) {

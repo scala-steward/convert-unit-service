@@ -1,12 +1,21 @@
 package v1.units.domain
 
+/**
+ * All project's entities.
+ */
 object Entities {
 
+  /**
+   * Math expression used to calculate the multiplication factor and the reduce name on SI.
+   */
   sealed trait Expression {
     def name(): String
     def multiplicationFactor(): BigDecimal
   }
 
+  /**
+   * Tree logic entity to keep expressions and the operation.
+   */
   case class OperationExpr(left: Expression, right: Expression, multiply: Boolean) extends Expression {
 
     override def name(): String =
@@ -23,6 +32,9 @@ object Entities {
 
   }
 
+  /**
+   * Unit value entity.
+   */
   case class UnitExpr(value: Unit) extends Expression {
 
     override def name(): String = this.value.nameSI
@@ -30,6 +42,9 @@ object Entities {
 
   }
 
+  /**
+   * SI unit.
+   */
   sealed trait Unit {
     def symbol: String
     def quantity: String

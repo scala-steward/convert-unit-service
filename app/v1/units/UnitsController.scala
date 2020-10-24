@@ -6,6 +6,9 @@ import play.api.mvc.{Action, AnyContent, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
+/**
+ * Handle all units operations and return HTTP responses.
+ */
 class UnitsController @Inject()(ucc: UnitsControllerComponents)(
   implicit ec: ExecutionContext)
   extends UnitsBaseController(ucc) {
@@ -14,9 +17,17 @@ class UnitsController @Inject()(ucc: UnitsControllerComponents)(
     request.getQueryString("units").map(success) getOrElse failure
   }
 
+  /**
+   * If it hasn't any "units" query string value then this method is call.
+   * @return 400 Bad Request with error message.
+   */
   private def failure: Future[Result] =
     Future.successful(badRequestWithError("Empty unit query string."))
 
+  /**
+   * If it has an "units" query string value then we'll convert to a SI value.
+   * @return 200 OK with conversion json object - see more [[v1.units.domain.Response.ConversionResponse]].
+   */
   private def success(unit: String): Future[Result] =
     this.handler.convertToSI(unit)
       .map(response => Ok(Json.toJson(response)))
