@@ -12,6 +12,7 @@ object Dependencies extends AutoPlugin {
     libraryDependencies ++= Seq(
       guice,
       ws,
+      ehcache,
       "net.logstash.logback" % "logstash-logback-encoder" % "6.2",
       "io.lemonlabs" %% "scala-uri" % "1.5.1",
       "net.codingwell" %% "scala-guice" % "4.2.6",

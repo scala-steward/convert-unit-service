@@ -1,6 +1,7 @@
 package v1.units
 
 import javax.inject.Inject
+import play.api.cache.AsyncCacheApi
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, Result}
 
@@ -9,7 +10,7 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
  * Handle all units operations and return HTTP responses.
  */
-class UnitsController @Inject()(ucc: UnitsControllerComponents)(
+class UnitsController @Inject()(cacheApi: AsyncCacheApi, ucc: UnitsControllerComponents)(
   implicit ec: ExecutionContext)
   extends UnitsBaseController(ucc) {
 
@@ -29,8 +30,10 @@ class UnitsController @Inject()(ucc: UnitsControllerComponents)(
    * @return 200 OK with conversion json object - see more [[v1.units.domain.Response.ConversionResponse]].
    */
   private def success(unit: String): Future[Result] =
-    this.handler.convertToSI(unit)
-      .map(response => Ok(Json.toJson(response)))
-      .recover { case error: Error => badRequestWithError(error.getMessage) }
+    this.cacheApi.getOrElseUpdate(s"conversion-to-$unit") {
+      this.handler.convertToSI(unit)
+        .map(response => Ok(Json.toJson(response)))
+        .recover { case error: Error => badRequestWithError(error.getMessage) }
+    }
 
 }
