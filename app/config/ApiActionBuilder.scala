@@ -3,10 +3,10 @@ package config
 import javax.inject.Inject
 import net.logstash.logback.marker.LogstashMarker
 import org.slf4j.LoggerFactory
-import play.api.MarkerContext
 import play.api.http.HttpVerbs
 import play.api.i18n.MessagesApi
 import play.api.mvc._
+import play.api.{Environment, MarkerContext, Mode}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -48,7 +48,7 @@ trait RequestMarkerContext {
  * The action builder for the API resources.
  * This is the place to place logs, metrics, to increase the request with contextual data and manipulate the result.
  */
-class ApiActionBuilder @Inject()(messagesApi: MessagesApi, playBodyParsers: PlayBodyParsers)(
+class ApiActionBuilder @Inject()(environment: Environment, messagesApi: MessagesApi, playBodyParsers: PlayBodyParsers)(
   implicit val executionContext: ExecutionContext)
   extends ActionBuilder[ApiRequest, AnyContent]
     with RequestMarkerContext
@@ -63,20 +63,25 @@ class ApiActionBuilder @Inject()(messagesApi: MessagesApi, playBodyParsers: Play
   override def invokeBlock[A](request: Request[A], block: ApiRequestBlock[A]): Future[Result] = {
     implicit val markerContext: MarkerContext = requestHeaderToMarkerContext(request)
 
-    this.logger.debug(s"Request-Id: ${request.id}")
-    this.logger.debug(s"Method: ${request.method}")
-    this.logger.debug(s"Path: ${request.uri}")
-    this.logger.debug(s"Body: ${request.body}")
+    val devMode = environment.mode == Mode.Dev
+    if (devMode) {
+      this.logger.debug(s"Request-Id: ${request.id}")
+      this.logger.debug(s"Method: ${request.method}")
+      this.logger.debug(s"Path: ${request.uri}")
+      this.logger.debug(s"Body: ${request.body}")
 
-    if (request.queryString.nonEmpty)
-      this.logger.debug(s"Query String: ${request.queryString}")
+      if (request.queryString.nonEmpty)
+        this.logger.debug(s"Query String: ${request.queryString}")
+    }
 
     val startTime = System.currentTimeMillis()
     val future = block(new ApiRequest(request, messagesApi))
 
     future.map { result =>
       val endTime = System.currentTimeMillis()
-      logger.debug("Time: {} ms", endTime - startTime)
+
+      if (devMode)
+        logger.debug("Time: {} ms", endTime - startTime)
 
       request.method match {
         case GET | HEAD =>

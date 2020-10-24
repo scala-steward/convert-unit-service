@@ -1,7 +1,6 @@
 package v1.units
 
 import javax.inject.Inject
-import play.api.cache.AsyncCacheApi
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, Result}
 
@@ -10,7 +9,7 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
  * Handle all units operations and return HTTP responses.
  */
-class UnitsController @Inject()(cacheApi: AsyncCacheApi, ucc: UnitsControllerComponents)(
+class UnitsController @Inject()(ucc: UnitsControllerComponents)(
   implicit ec: ExecutionContext)
   extends UnitsBaseController(ucc) {
 

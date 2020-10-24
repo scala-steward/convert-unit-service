@@ -125,16 +125,16 @@ object Entities {
   object Unit {
 
     def fromString(unit: String): Unit = unit.toLowerCase match {
-      case "second" | "sec"   => Second
-      case "minute" | "min"   => Minute
-      case "hour"   | "h"     => Hour
-      case "day"    | "d"     => Day
-      case "degree" | "°"     => Degree
-      case "arcminute" | "'"  => ArcMinute
-      case "arcsecond" | "\"" => ArcSecond
-      case "hectare"   | "ha" => Hectare
-      case "litre" | "l"      => Litre
-      case "tonne" | "t"      => Tonne
+      case "second" | "sec" | "s" => Second
+      case "minute" | "min"       => Minute
+      case "hour"   | "h"         => Hour
+      case "day"    | "d"         => Day
+      case "degree" | "°"         => Degree
+      case "arcminute" | "'"      => ArcMinute
+      case "arcsecond" | "\""     => ArcSecond
+      case "hectare"   | "ha"     => Hectare
+      case "litre" | "l"          => Litre
+      case "tonne" | "t"          => Tonne
       case _ => throw new Exception(s"Unmapped unit ($unit).")
     }
 

@@ -2,6 +2,7 @@ package v1.units
 
 import config.{ApiActionBuilder, RequestMarkerContext}
 import javax.inject.Inject
+import play.api.cache.AsyncCacheApi
 import play.api.http.FileMimeTypes
 import play.api.i18n.{Langs, MessagesApi}
 import play.api.libs.json.Json
@@ -14,6 +15,7 @@ import play.api.mvc._
  * to the controller, so the controller only needs to have one thing injected.
  */
 case class UnitsControllerComponents @Inject()(apiActionBuilder: ApiActionBuilder,
+                                               cache: AsyncCacheApi,
                                                handler: UnitsHandler,
                                                actionBuilder: DefaultActionBuilder,
                                                parsers: PlayBodyParsers,
@@ -35,6 +37,8 @@ class UnitsBaseController @Inject()(ucc: UnitsControllerComponents)
   def ApiAction: ApiActionBuilder = ucc.apiActionBuilder
 
   def handler: UnitsHandler = ucc.handler
+
+  def cacheApi: AsyncCacheApi = ucc.cache
 
   def badRequestWithError(error: String): Result =
     BadRequest(Json.obj("error" -> error))
