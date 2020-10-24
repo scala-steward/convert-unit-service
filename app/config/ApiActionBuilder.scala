@@ -68,9 +68,16 @@ class ApiActionBuilder @Inject()(messagesApi: MessagesApi, playBodyParsers: Play
     this.logger.debug(s"Path: ${request.uri}")
     this.logger.debug(s"Body: ${request.body}")
 
+    if (request.queryString.nonEmpty)
+      this.logger.debug(s"Query String: ${request.queryString}")
+
+    val startTime = System.currentTimeMillis()
     val future = block(new ApiRequest(request, messagesApi))
 
     future.map { result =>
+      val endTime = System.currentTimeMillis()
+      logger.debug("Time: {} ms", endTime - startTime)
+
       request.method match {
         case GET | HEAD =>
           result.withHeaders("Cache-Control" -> s"max-age: 100")

@@ -33,6 +33,7 @@
 
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
+  <logger name="config" level="DEBUG" />
   <logger name="v1.units" level="DEBUG" />
 
   <root level="WARN">
