@@ -26,7 +26,7 @@ case class UnitsControllerComponents @Inject()(apiActionBuilder: ApiActionBuilde
 /**
  * Exposes actions and handler to the [[UnitsController]], connecting the injected state to the base class.
  */
-class UnitsBaseController()(implicit ucc: UnitsControllerComponents)
+class UnitsBaseController @Inject()(ucc: UnitsControllerComponents)
   extends BaseController
     with RequestMarkerContext {
 
