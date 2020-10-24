@@ -1,4 +1,5 @@
 import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.sbt.SbtNativePackager.Universal
 import sbt.Keys._
 import sbt._
 import sbt.plugins.JvmPlugin
@@ -15,6 +16,7 @@ object ConvertUnitService extends AutoPlugin {
     version := conf.getString("play.app.version"),
     resolvers += Resolver.typesafeRepo("releases"),
     javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
+    javaOptions in Universal ++= Seq("-Dpidfile.path=/dev/null"),
     scalacOptions ++= Seq(
       "-encoding",
       "UTF-8",
