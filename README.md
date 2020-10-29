@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/felipebonezi/convert-unit-service.svg?branch=main)](https://travis-ci.org/felipebonezi/convert-unit-service)
+
 # Convert Unit Service
 A conversion unit service implemented with Scala and Play! Framework 
 to perform unit conversion to SI from their “widely used” counterparts. 
