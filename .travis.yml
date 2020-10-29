@@ -1,0 +1,26 @@
+language: scala
+scala:
+    - 2.13.3
+
+os:
+  - linux
+
+jdk:
+  - oraclejdk11
+
+script:
+  - sbt +publishLocal
+
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+
+before_cache:
+  # Ensure changes to the cache aren't persisted
+  - rm -rf $HOME/.ivy2/cache/br.com.felipebonezi
+  - rm -rf $HOME/.ivy2/cache/scala_*/sbt_*/br.com.felipebonezi
+  - rm -rf $HOME/.ivy2/cache/com.github.felipebonezi
+  - rm -rf $HOME/.ivy2/cache/scala_*/sbt_*/com.github.felipebonezi
+
+  # Delete all ivy data files since ivy touches them on each build
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
