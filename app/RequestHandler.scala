@@ -10,21 +10,16 @@ import play.core.WebCommands
  * Handle all requests in the project.
  * This class have the responsibility to map if we are facing with a REST request or not.
  */
-class RequestHandler @Inject()(webCommands: WebCommands,
-                               optDevContext: OptionalDevContext,
-                               router: Router,
-                               errorHandler: HttpErrorHandler,
-                               configuration: HttpConfiguration,
-                               filters: HttpFilters)
-    extends DefaultHttpRequestHandler(webCommands,
-                                      optDevContext,
-                                      router,
-                                      errorHandler,
-                                      configuration,
-                                      filters) {
+class RequestHandler @Inject() (
+    webCommands: WebCommands,
+    optDevContext: OptionalDevContext,
+    router: Router,
+    errorHandler: HttpErrorHandler,
+    configuration: HttpConfiguration,
+    filters: HttpFilters
+) extends DefaultHttpRequestHandler(webCommands, optDevContext, router, errorHandler, configuration, filters) {
 
-  override def handlerForRequest(
-      request: RequestHeader): (RequestHeader, Handler) = {
+  override def handlerForRequest(request: RequestHeader): (RequestHeader, Handler) = {
     super.handlerForRequest {
       if (isREST(request)) {
         addTrailingSlash(request)
@@ -37,7 +32,7 @@ class RequestHandler @Inject()(webCommands: WebCommands,
   private def isREST(request: RequestHeader) = {
     request.uri match {
       case uri: String if uri.contains("v1/") => true
-      case _                                   => false
+      case _                                  => false
     }
   }
 
@@ -50,9 +45,7 @@ class RequestHandler @Inject()(webCommands: WebCommands,
         )
       } else {
         origReq.withTarget(
-          RequestTarget(path = path,
-                        uriString = origReq.uri,
-                        queryString = origReq.queryString)
+          RequestTarget(path = path, uriString = origReq.uri, queryString = origReq.queryString)
         )
       }
     } else {

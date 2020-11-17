@@ -1,20 +1,22 @@
 package v1.units
 
-import java.math.{MathContext, RoundingMode}
+import java.math.MathContext
+import java.math.RoundingMode
 
 import javax.inject.Inject
 import v1.units.domain.Entities._
 import v1.units.domain.Response.ConversionResponse
 
 import scala.collection.mutable
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 /**
  * Handle units conversion to the International System of Units.
  *
  * @see <a href="https://en.wikipedia.org/wiki/International_System_of_Units">https://en.wikipedia.org/wiki/International_System_of_Units</a>
  */
-class UnitsHandler @Inject()()(implicit ec: ExecutionContext) {
+class UnitsHandler @Inject() ()(implicit ec: ExecutionContext) {
 
   /**
    * Math configuration to define floating point number
@@ -23,8 +25,11 @@ class UnitsHandler @Inject()()(implicit ec: ExecutionContext) {
   private lazy val significantContext = new MathContext(14, RoundingMode.DOWN)
 
   def convertToSI(unit: String): Future[ConversionResponse] =
-    Future.successful(makeExpression(unit))
-      .map(expr => ConversionResponse(expr.name(), BigDecimal(expr.multiplicationFactor().toString(), significantContext)))
+    Future
+      .successful(makeExpression(unit))
+      .map(expr =>
+        ConversionResponse(expr.name(), BigDecimal(expr.multiplicationFactor().toString(), significantContext))
+      )
 
   /**
    * Make an expression based on the unit query string.
@@ -39,7 +44,7 @@ class UnitsHandler @Inject()()(implicit ec: ExecutionContext) {
 
     val formula = s"${unit.replaceAll(" ", "")}"
 
-    val queue = mutable.ArrayDeque[String]()
+    val queue   = mutable.ArrayDeque[String]()
     val builder = new StringBuilder()
     formula.foreach(char => {
       if (char == '(')
@@ -70,7 +75,7 @@ class UnitsHandler @Inject()()(implicit ec: ExecutionContext) {
     val formula =
       if (unit.startsWith("(")) {
         val firstIdx = unit.indexOf("(")
-        val lastIdx = unit.lastIndexOf(")")
+        val lastIdx  = unit.lastIndexOf(")")
         unit.substring(firstIdx + 1, lastIdx)
       } else {
         unit
@@ -80,10 +85,10 @@ class UnitsHandler @Inject()()(implicit ec: ExecutionContext) {
     val dIdx = formula.indexOf("/")
     if (mIdx >= 0 || dIdx >= 0) {
       val multiply = (mIdx != -1 && mIdx < dIdx) || dIdx == -1
-      val left = formula.substring(0, if (multiply) mIdx else dIdx)
-      val right = formula.substring(if (multiply) mIdx + 1 else dIdx + 1)
+      val left     = formula.substring(0, if (multiply) mIdx else dIdx)
+      val right    = formula.substring(if (multiply) mIdx + 1 else dIdx + 1)
 
-      val leftUnit = UnitExpr(Unit.fromString(left))
+      val leftUnit  = UnitExpr(Unit.fromString(left))
       val rightUnit = getExpression(right)
       OperationExpr(leftUnit, rightUnit, multiply)
     } else {

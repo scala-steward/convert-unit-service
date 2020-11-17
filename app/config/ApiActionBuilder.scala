@@ -6,21 +6,21 @@ import org.slf4j.LoggerFactory
 import play.api.http.HttpVerbs
 import play.api.i18n.MessagesApi
 import play.api.mvc._
-import play.api.{Environment, MarkerContext, Mode}
+import play.api.Environment
+import play.api.MarkerContext
+import play.api.Mode
 
-import scala.concurrent.{ExecutionContext, Future}
-
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 /**
  * A bundled request for API resources.
  * This is commonly used to store specific request information, such as security credentials and useful shortcut methods.
  */
-trait ApiRequestHeader
-  extends MessagesRequestHeader
-    with PreferredMessagesProvider
+trait ApiRequestHeader extends MessagesRequestHeader with PreferredMessagesProvider
 
 class ApiRequest[A](request: Request[A], val messagesApi: MessagesApi)
-  extends WrappedRequest(request)
+    extends WrappedRequest(request)
     with ApiRequestHeader
 
 /**
@@ -48,9 +48,9 @@ trait RequestMarkerContext {
  * The action builder for the API resources.
  * This is the place to place logs, metrics, to increase the request with contextual data and manipulate the result.
  */
-class ApiActionBuilder @Inject()(environment: Environment, messagesApi: MessagesApi, playBodyParsers: PlayBodyParsers)(
-  implicit val executionContext: ExecutionContext)
-  extends ActionBuilder[ApiRequest, AnyContent]
+class ApiActionBuilder @Inject() (environment: Environment, messagesApi: MessagesApi, playBodyParsers: PlayBodyParsers)(
+    implicit val executionContext: ExecutionContext
+) extends ActionBuilder[ApiRequest, AnyContent]
     with RequestMarkerContext
     with HttpVerbs {
 
@@ -75,7 +75,7 @@ class ApiActionBuilder @Inject()(environment: Environment, messagesApi: Messages
     }
 
     val startTime = System.currentTimeMillis()
-    val future = block(new ApiRequest(request, messagesApi))
+    val future    = block(new ApiRequest(request, messagesApi))
 
     future.map { result =>
       val endTime = System.currentTimeMillis()

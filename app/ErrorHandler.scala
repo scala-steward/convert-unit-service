@@ -1,4 +1,5 @@
-import javax.inject.{Inject, Provider}
+import javax.inject.Inject
+import javax.inject.Provider
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.DefaultHttpErrorHandler
@@ -14,15 +15,22 @@ import scala.concurrent._
 /**
  * Handle all errors throw by controllers, handlers or routers.
  */
-class ErrorHandler(environment: Environment, configuration: Configuration,
-                   sourceMapper: Option[SourceMapper] = None, optionRouter: => Option[Router] = None)
-  extends DefaultHttpErrorHandler(environment, configuration, sourceMapper, optionRouter) {
+class ErrorHandler(
+    environment: Environment,
+    configuration: Configuration,
+    sourceMapper: Option[SourceMapper] = None,
+    optionRouter: => Option[Router] = None
+) extends DefaultHttpErrorHandler(environment, configuration, sourceMapper, optionRouter) {
 
   private val logger = LoggerFactory.getLogger("application.ErrorHandler")
 
   @Inject
-  def this(environment: Environment, configuration: Configuration, sourceMapper: OptionalSourceMapper,
-           router: Provider[Router]) = {
+  def this(
+      environment: Environment,
+      configuration: Configuration,
+      sourceMapper: OptionalSourceMapper,
+      router: Provider[Router]
+  ) = {
     this(environment, configuration, sourceMapper.sourceMapper, Some(router.get))
   }
 
@@ -40,13 +48,15 @@ class ErrorHandler(environment: Environment, configuration: Configuration,
         case clientError if statusCode >= 400 && statusCode < 500 =>
           Results.Status(statusCode)
         case nonClientError =>
-          throw new IllegalArgumentException(s"onClientError invoked with non client error status code $statusCode: $message")
+          throw new IllegalArgumentException(
+            s"onClientError invoked with non client error status code $statusCode: $message"
+          )
       }
       result
     }
   }
 
-  override protected def onDevServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
+  protected override def onDevServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
     val message = exception.toString
     if (message.toLowerCase.contains("evolution"))
       super.onDevServerError(request, exception)
@@ -54,7 +64,7 @@ class ErrorHandler(environment: Environment, configuration: Configuration,
       Future.successful(InternalServerError(Json.obj("exception" -> message)))
   }
 
-  override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
+  protected override def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
     Future.successful(InternalServerError)
   }
 
