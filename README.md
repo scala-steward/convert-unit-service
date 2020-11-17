@@ -1,5 +1,9 @@
-[![Build Status](https://travis-ci.org/felipebonezi/convert-unit-service.svg?branch=main)](https://travis-ci.org/felipebonezi/convert-unit-service) [![Scala Steward badge](https://img.shields.io/badge/Scala_Steward-helping-blue.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAMAAAARSr4IAAAAVFBMVEUAAACHjojlOy5NWlrKzcYRKjGFjIbp293YycuLa3pYY2LSqql4f3pCUFTgSjNodYRmcXUsPD/NTTbjRS+2jomhgnzNc223cGvZS0HaSD0XLjbaSjElhIr+AAAAAXRSTlMAQObYZgAAAHlJREFUCNdNyosOwyAIhWHAQS1Vt7a77/3fcxxdmv0xwmckutAR1nkm4ggbyEcg/wWmlGLDAA3oL50xi6fk5ffZ3E2E3QfZDCcCN2YtbEWZt+Drc6u6rlqv7Uk0LdKqqr5rk2UCRXOk0vmQKGfc94nOJyQjouF9H/wCc9gECEYfONoAAAAASUVORK5CYII=)](https://scala-steward.org)
+[![Build Status](https://travis-ci.org/felipebonezi/convert-unit-service.svg?branch=main)](https://travis-ci.org/felipebonezi/convert-unit-service) 
+[![Maintainability](https://api.codeclimate.com/v1/badges/13e086f81e74ee5fd33d/maintainability)](https://codeclimate.com/github/felipebonezi/convert-unit-service/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/13e086f81e74ee5fd33d/test_coverage)](https://codeclimate.com/github/felipebonezi/convert-unit-service/test_coverage)
+[![Scala Steward badge](https://img.shields.io/badge/Scala_Steward-helping-blue.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAMAAAARSr4IAAAAVFBMVEUAAACHjojlOy5NWlrKzcYRKjGFjIbp293YycuLa3pYY2LSqql4f3pCUFTgSjNodYRmcXUsPD/NTTbjRS+2jomhgnzNc223cGvZS0HaSD0XLjbaSjElhIr+AAAAAXRSTlMAQObYZgAAAHlJREFUCNdNyosOwyAIhWHAQS1Vt7a77/3fcxxdmv0xwmckutAR1nkm4ggbyEcg/wWmlGLDAA3oL50xi6fk5ffZ3E2E3QfZDCcCN2YtbEWZt+Drc6u6rlqv7Uk0LdKqqr5rk2UCRXOk0vmQKGfc94nOJyQjouF9H/wCc9gECEYfONoAAAAASUVORK5CYII=)](https://scala-steward.org)
 
+![convert-unit-service](https://socialify.git.ci/felipebonezi/convert-unit-service/image?description=1&font=KoHo&forks=1&language=1&owner=1&pattern=Charlie%20Brown&pulls=1&stargazers=1&theme=Light)
 
 # Convert Unit Service
 A conversion unit service implemented with Scala and Play! Framework 
