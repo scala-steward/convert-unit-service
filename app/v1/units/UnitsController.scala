@@ -2,19 +2,21 @@ package v1.units
 
 import javax.inject.Inject
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.Action
+import play.api.mvc.AnyContent
+import play.api.mvc.Result
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 /**
  * Handle all units operations and return HTTP responses.
  */
-class UnitsController @Inject()(ucc: UnitsControllerComponents)(
-  implicit ec: ExecutionContext)
-  extends UnitsBaseController(ucc) {
+class UnitsController @Inject() (ucc: UnitsControllerComponents)(implicit ec: ExecutionContext)
+    extends UnitsBaseController(ucc) {
 
   def convertToSI: Action[AnyContent] = ApiAction.async { implicit request =>
-    request.getQueryString("units").map(success) getOrElse failure
+    request.getQueryString("units").map(success).getOrElse(failure)
   }
 
   /**
@@ -30,7 +32,8 @@ class UnitsController @Inject()(ucc: UnitsControllerComponents)(
    */
   private def success(unit: String): Future[Result] =
     this.cacheApi.getOrElseUpdate(s"conversion-to-$unit") {
-      this.handler.convertToSI(unit)
+      this.handler
+        .convertToSI(unit)
         .map(response => Ok(Json.toJson(response)))
         .recover { case error: Error => badRequestWithError(error.getMessage) }
     }

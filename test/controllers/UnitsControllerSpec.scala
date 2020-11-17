@@ -8,16 +8,13 @@ import play.api.libs.json.Json
 import play.api.mvc.Results
 import play.api.test.Helpers._
 import play.api.test._
-import v1.units.{UnitsController, UnitsControllerComponents}
+import v1.units.UnitsController
+import v1.units.UnitsControllerComponents
 
 import scala.concurrent.ExecutionContext
 
 @RunWith(classOf[JUnitRunner])
-class UnitsControllerSpec
-  extends PlaySpec
-    with GuiceOneAppPerSuite
-    with Injecting
-    with Results {
+class UnitsControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Injecting with Results {
 
   private implicit lazy val context: ExecutionContext =
     app.injector.instanceOf(classOf[ExecutionContext])
@@ -25,14 +22,14 @@ class UnitsControllerSpec
   private lazy val components: UnitsControllerComponents =
     app.injector.instanceOf(classOf[UnitsControllerComponents])
 
-  private val path: String = "/units/si"
+  private val path: String                = "/units/si"
   private val expectedContentType: String = "application/json"
 
   s"WHEN route $path is called" must {
 
     def convertTo(controller: UnitsController, variables: (String, String, BigDecimal)): Unit = {
       val request = FakeRequest(GET, s"$path?units=${variables._1}")
-      val result = controller.convertToSI.apply(request)
+      val result  = controller.convertToSI.apply(request)
       status(result) mustBe OK
       contentType(result) mustBe Some(expectedContentType)
       contentAsJson(result) mustBe Json.obj("unit_name" -> variables._2, "multiplication_factor" -> variables._3)

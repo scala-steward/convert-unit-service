@@ -1,6 +1,7 @@
 package v1.units.domain
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.Format
+import play.api.libs.json.Json
 
 object Response {
 
