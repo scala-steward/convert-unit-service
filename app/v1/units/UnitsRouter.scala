@@ -10,11 +10,10 @@ import play.api.routing.sird._
  * Some of the actions are:
  *    1) Convert to SI.
  */
-class UnitsRouter @Inject()(controller: UnitsController) extends SimpleRouter {
+class UnitsRouter @Inject() (controller: UnitsController) extends SimpleRouter {
 
-  override def routes: Routes = {
-    case GET(p"/") =>
-      this.controller.convertToSI
+  override def routes: Routes = { case GET(p"/") =>
+    this.controller.convertToSI
   }
 
 }
