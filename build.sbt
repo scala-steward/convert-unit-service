@@ -1,16 +1,18 @@
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
 
 // Project configurations using scala classes at /project folder.
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .enablePlugins(ConvertUnitService, Dependencies)
 
-scalaVersion := "2.13.5"
+scalaVersion := "2.13.8"
 
 lazy val conf: Config = ConfigFactory.parseFile(new File("conf/application.conf"))
 
 // Docker Configuration
-import com.typesafe.sbt.packager.docker.{DockerChmodType, DockerPermissionStrategy}
+import com.typesafe.sbt.packager.docker.DockerChmodType
+import com.typesafe.sbt.packager.docker.DockerPermissionStrategy
 dockerChmodType := DockerChmodType.UserGroupWriteExecute
 dockerPermissionStrategy := DockerPermissionStrategy.CopyChown
 
