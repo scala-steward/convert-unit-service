@@ -16,7 +16,7 @@ object ConvertUnitService extends AutoPlugin {
     version := conf.getString("play.app.version"),
     resolvers += Resolver.typesafeRepo("releases"),
     javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
-    javaOptions in Universal ++= Seq("-Dpidfile.path=/dev/null"),
+    (Universal / javaOptions) ++= Seq("-Dpidfile.path=/dev/null"),
     scalacOptions ++= Seq(
       "-encoding",
       "UTF-8",
@@ -27,7 +27,7 @@ object ConvertUnitService extends AutoPlugin {
       "-Ywarn-numeric-widen",
       "-Xfatal-warnings"
     ),
-    scalacOptions in Test ++= Seq("-Yrangepos"),
+    (Test / scalacOptions) ++= Seq("-Yrangepos"),
     autoAPIMappings := true
   )
 }
