@@ -6,7 +6,7 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .enablePlugins(ConvertUnitService, Dependencies)
 
-scalaVersion := "2.13.8"
+scalaVersion := "2.13.12"
 
 lazy val conf: Config = ConfigFactory.parseFile(new File("conf/application.conf"))
 
